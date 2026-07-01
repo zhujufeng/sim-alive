@@ -91,6 +91,7 @@ const res = await fetch(url, {
 ## 文件说明
 
 - `index.html`：页面、样式和交互逻辑
+- `sim-alive-hero.png`：页面主视觉
 - `payload.txt`：约 120KB 的随机文本，用于产生实际下载流量
 - `README.md`：项目说明
 - `LICENSE`：MIT 开源许可证

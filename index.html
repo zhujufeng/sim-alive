@@ -3,212 +3,479 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="SIM Alive 是一个开源海外 SIM 保号工具，用少量移动数据产生一次使用记录。">
+  <meta property="og:title" content="SIM Alive">
+  <meta property="og:description" content="开源、无后台、无统计的海外 SIM 保号工具。">
+  <meta property="og:image" content="sim-alive-hero.png">
   <title>SIM Alive - 海外手机号保号工具</title>
   <style>
     :root {
-      color-scheme: light;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: #f4f2ec;
-      color: #1f2933;
+      color-scheme: light dark;
+      --bg: #eef1ea;
+      --surface: #fffdf7;
+      --surface-soft: #f7f4ea;
+      --text: #17211d;
+      --muted: #5a665f;
+      --line: #d8dccf;
+      --accent: #0c6b4f;
+      --accent-strong: #084c38;
+      --accent-soft: #dbeee6;
+      --shadow: rgb(37 51 45 / 14%);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #0d1512;
+        --surface: #111d18;
+        --surface-soft: #17251f;
+        --text: #eff7f2;
+        --muted: #b6c4bd;
+        --line: #2a3d34;
+        --accent: #6ee7b7;
+        --accent-strong: #9af2cc;
+        --accent-soft: #14382b;
+        --shadow: rgb(0 0 0 / 34%);
+      }
+    }
+
+    * {
+      box-sizing: border-box;
     }
 
     body {
       margin: 0;
-      min-height: 100vh;
+      min-height: 100dvh;
+      overflow-x: hidden;
+      background:
+        radial-gradient(circle at 15% 10%, rgb(12 107 79 / 14%), transparent 32rem),
+        linear-gradient(135deg, var(--bg), var(--surface-soft));
+    }
+
+    a {
+      color: var(--accent-strong);
+      font-weight: 750;
+      text-underline-offset: 3px;
+    }
+
+    .shell {
+      width: 100%;
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 22px;
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      min-height: 58px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 850;
+      letter-spacing: .01em;
+    }
+
+    .mark {
+      width: 34px;
+      height: 34px;
+      border-radius: 10px;
+      background: var(--accent);
+      color: var(--surface);
       display: grid;
       place-items: center;
-      padding: 24px;
+      font-size: 14px;
+      font-weight: 900;
     }
 
-    main {
-      width: min(100%, 460px);
-      background: #fffdf8;
-      border: 1px solid #ddd6c8;
-      border-radius: 8px;
-      padding: 24px;
-      box-shadow: 0 16px 36px rgb(31 41 55 / 10%);
-    }
-
-    .eyebrow {
-      display: inline-flex;
+    nav {
+      display: flex;
       align-items: center;
-      gap: 8px;
-      margin-bottom: 12px;
-      padding: 6px 10px;
+      gap: 14px;
+      font-size: 14px;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1.05fr) minmax(320px, .95fr);
+      gap: 34px;
+      align-items: center;
+      padding: 28px 0 36px;
+    }
+
+    .copy {
+      max-width: 590px;
+      min-width: 0;
+    }
+
+    .label {
+      display: inline-flex;
+      margin-bottom: 18px;
+      padding: 7px 11px;
+      border: 1px solid var(--line);
       border-radius: 999px;
-      background: #e8f4ef;
-      color: #0f6b49;
+      background: var(--accent-soft);
+      color: var(--accent-strong);
       font-size: 13px;
-      font-weight: 700;
+      font-weight: 800;
     }
 
     h1 {
-      margin: 0 0 8px;
-      font-size: 32px;
-      line-height: 1.2;
-    }
-
-    p {
       margin: 0;
-      color: #4b5560;
-      line-height: 1.7;
+      max-width: 10ch;
+      font-size: clamp(46px, 8vw, 86px);
+      line-height: .94;
+      letter-spacing: 0;
     }
 
     .lead {
-      font-size: 16px;
+      margin: 18px 0 0;
+      max-width: 28rem;
+      color: var(--muted);
+      font-size: clamp(16px, 2.4vw, 19px);
+      line-height: 1.65;
+      overflow-wrap: anywhere;
+    }
+
+    .tool {
+      margin-top: 24px;
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: color-mix(in srgb, var(--surface) 92%, transparent);
+      box-shadow: 0 24px 70px var(--shadow);
     }
 
     .meter {
-      margin: 20px 0;
-      padding: 16px;
-      border-radius: 8px;
-      background: #1f2933;
-      border: 1px solid #1f2933;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 12px;
+      align-items: end;
+      margin-bottom: 14px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .meter span {
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 750;
     }
 
     .meter strong {
       display: block;
-      margin-bottom: 4px;
-      font-size: 26px;
-      color: #fffdf8;
+      margin-top: 4px;
+      font-size: 28px;
+      line-height: 1;
     }
 
-    .meter p {
-      color: #d9e2ec;
-    }
-
-    .checks {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 8px;
-      margin: 0 0 20px;
-    }
-
-    .check {
-      padding: 10px 8px;
-      border-radius: 8px;
-      background: #f8f4ea;
-      border: 1px solid #e7dcc9;
-      text-align: center;
-      font-size: 13px;
-      color: #374151;
-    }
-
-    .proof {
-      display: grid;
-      gap: 10px;
-      margin: 20px 0;
-    }
-
-    .proof div {
-      display: flex;
-      justify-content: space-between;
-      gap: 12px;
-      padding: 10px 0;
-      border-bottom: 1px solid #eee5d7;
-      font-size: 14px;
-      color: #4b5560;
-    }
-
-    .proof strong {
-      color: #1f2933;
+    .meter small {
+      color: var(--muted);
       text-align: right;
     }
 
     button {
       width: 100%;
-      height: 48px;
+      min-height: 52px;
       border: 0;
-      border-radius: 8px;
-      background: #0f6b49;
-      color: #fff;
+      border-radius: 14px;
+      background: var(--accent);
+      color: var(--surface);
       font: inherit;
-      font-weight: 700;
+      font-weight: 850;
       cursor: pointer;
+      transition: transform .18s ease, background-color .18s ease, opacity .18s ease;
+    }
+
+    button:hover:not(:disabled) {
+      background: var(--accent-strong);
+      transform: translateY(-1px);
+    }
+
+    button:active:not(:disabled) {
+      transform: translateY(1px);
     }
 
     button:disabled {
       cursor: wait;
-      opacity: .65;
-    }
-
-    button:hover:not(:disabled) {
-      background: #0b5439;
-    }
-
-    ul {
-      margin: 20px 0 0;
-      padding-left: 20px;
-      color: #4b5563;
-      line-height: 1.8;
+      opacity: .66;
     }
 
     #status {
       min-height: 28px;
-      margin-top: 14px;
-      font-weight: 700;
-      color: #15803d;
+      margin: 14px 0 0;
+      color: var(--accent-strong);
+      font-weight: 800;
+      line-height: 1.5;
+    }
+
+    #status[data-tone="error"] {
+      color: #b42318;
     }
 
     #history {
-      margin-top: 16px;
+      margin: 6px 0 0;
+      color: var(--muted);
       font-size: 14px;
-      color: #6b7280;
+      line-height: 1.6;
       white-space: pre-line;
     }
 
-    footer {
-      margin-top: 20px;
-      padding-top: 16px;
-      border-top: 1px solid #eee5d7;
-      font-size: 14px;
-      color: #6b7280;
+    .visual {
+      position: relative;
+      min-width: 0;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      background: var(--surface);
+      box-shadow: 0 28px 80px var(--shadow);
     }
 
-    a {
-      color: #0f6b49;
-      font-weight: 700;
+    .visual img {
+      display: block;
+      width: 100%;
+      aspect-ratio: 16 / 10;
+      object-fit: cover;
+    }
+
+    .signal {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: var(--line);
+      border-top: 1px solid var(--line);
+    }
+
+    .signal div {
+      min-height: 92px;
+      padding: 14px;
+      background: var(--surface);
+    }
+
+    .signal span {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 750;
+    }
+
+    .signal strong {
+      display: block;
+      margin-top: 7px;
+      font-size: 15px;
+      line-height: 1.35;
+    }
+
+    .steps {
+      display: grid;
+      grid-template-columns: 1.05fr .95fr;
+      gap: 28px;
+      align-items: start;
+      padding: 10px 0 36px;
+    }
+
+    .steps h2 {
+      margin: 0;
+      max-width: 12ch;
+      font-size: clamp(28px, 4.2vw, 48px);
+      line-height: 1;
+      letter-spacing: 0;
+    }
+
+    .steps p {
+      margin: 16px 0 0;
+      max-width: 32rem;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    .checklist {
+      display: grid;
+      gap: 12px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .checklist li {
+      padding: 14px 16px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: var(--surface);
+      color: var(--muted);
+      line-height: 1.55;
+    }
+
+    .checklist strong {
+      display: block;
+      margin-bottom: 3px;
+      color: var(--text);
+    }
+
+    footer {
+      display: flex;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 22px 0 8px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+      .copy, .visual, .steps {
+        animation: rise .7s cubic-bezier(.16, 1, .3, 1) both;
+      }
+
+      .visual {
+        animation-delay: .08s;
+      }
+
+      .steps {
+        animation-delay: .16s;
+      }
+
+      @keyframes rise {
+        from {
+          opacity: 0;
+          transform: translateY(18px);
+        }
+
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+    }
+
+    @media (max-width: 780px) {
+      .shell {
+        padding: 16px;
+      }
+
+      header, footer {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      nav {
+        width: 100%;
+        flex-wrap: wrap;
+        justify-content: flex-start;
+      }
+
+      .meter {
+        grid-template-columns: 1fr;
+      }
+
+      .meter small {
+        text-align: left;
+      }
+
+      .hero, .steps {
+        grid-template-columns: 1fr;
+      }
+
+      .hero {
+        gap: 22px;
+        padding-top: 18px;
+      }
+
+      h1 {
+        max-width: 9ch;
+      }
+
+      .signal {
+        grid-template-columns: 1fr;
+      }
+
+      .signal div {
+        min-height: auto;
+      }
     }
   </style>
 </head>
 <body>
-  <main>
-    <div class="eyebrow">zhujufeng 开源维护</div>
-    <h1>SIM Alive</h1>
-    <p class="lead">给海外 SIM 轻量产生一次移动数据使用记录。适合 Giffgaff 等需要定期保持活跃的预付费手机号。</p>
+  <div class="shell">
+    <header>
+      <div class="brand">
+        <div class="mark" aria-hidden="true">SA</div>
+        <span>SIM Alive</span>
+      </div>
+      <nav aria-label="项目链接">
+        <a href="https://github.com/zhujufeng/sim-alive" rel="noopener">源码</a>
+        <a href="https://github.com/zhujufeng/sim-alive#%E8%87%AA%E5%B7%B1%E9%83%A8%E7%BD%B2" rel="noopener">部署</a>
+      </nav>
+    </header>
 
-    <section class="meter" aria-label="本次消耗">
-      <strong>约 120 KB</strong>
-      <p>单次探测流量。是否满足保号规则，以对应运营商记录为准。</p>
-    </section>
+    <main>
+      <section class="hero" aria-label="SIM Alive 保号工具">
+        <div class="copy">
+          <div class="label">开源海外 SIM 保号工具</div>
+          <h1>SIM Alive</h1>
+          <p class="lead">用少量移动数据，维持海外 SIM 活跃记录。</p>
 
-    <div class="checks" aria-label="使用前检查">
-      <div class="check">关闭 Wi-Fi</div>
-      <div class="check">仅开浏览器数据</div>
-      <div class="check">完成后断网</div>
-    </div>
+          <section class="tool" aria-label="保号操作">
+            <div class="meter">
+              <div>
+                <span>单次请求</span>
+                <strong>约 120 KB</strong>
+              </div>
+              <small>随机 URL<br>no-store</small>
+            </div>
 
-    <section class="proof" aria-label="请求机制">
-      <div><span>防缓存</span><strong>随机 URL + no-store</strong></div>
-      <div><span>隐私</span><strong>无后台、无统计</strong></div>
-      <div><span>适用</span><strong>海外 SIM 移动数据保号</strong></div>
-    </section>
+            <button id="run" type="button">开始保号</button>
+            <p id="status" role="status"></p>
+            <p id="history"></p>
+          </section>
+        </div>
 
-    <button id="run" type="button">开始保号</button>
-    <p id="status" role="status"></p>
-    <p id="history"></p>
+        <aside class="visual" aria-label="海外 SIM 使用场景">
+          <img src="sim-alive-hero.png" alt="手机、SIM 卡和卡托放在桌面上">
+          <div class="signal">
+            <div>
+              <span>隐私</span>
+              <strong>无后台，无统计</strong>
+            </div>
+            <div>
+              <span>缓存</span>
+              <strong>随机参数防命中</strong>
+            </div>
+            <div>
+              <span>适用</span>
+              <strong>多种海外预付费 SIM</strong>
+            </div>
+          </div>
+        </aside>
+      </section>
 
-    <ul>
-      <li>先关闭 Wi-Fi，只保留移动数据。</li>
-      <li>尽量关闭其他应用的联网权限。</li>
-      <li>完成后立即关闭移动数据。</li>
-    </ul>
+      <section class="steps" aria-label="使用前检查">
+        <div>
+          <h2>三步再点击。</h2>
+          <p>这个工具只负责产生一次很小的移动数据请求。是否满足保号规则，仍以运营商记录为准。</p>
+        </div>
+        <ul class="checklist">
+          <li><strong>关闭 Wi-Fi</strong>确保浏览器走需要保号的 SIM 移动数据。</li>
+          <li><strong>限制后台联网</strong>只保留浏览器，避免其他 App 偷跑流量。</li>
+          <li><strong>完成后断开移动数据</strong>再去运营商 App、官网或账单里确认记录。</li>
+        </ul>
+      </section>
+    </main>
 
     <footer>
-      由 zhujufeng 开源维护：
-      <a id="source" href="https://github.com/zhujufeng/sim-alive" rel="noopener">查看源码</a>
+      <span>由 zhujufeng 开源维护</span>
+      <a href="https://github.com/zhujufeng/sim-alive" rel="noopener">查看 GitHub 仓库</a>
     </footer>
-  </main>
+  </div>
 
   <script>
     const button = document.querySelector("#run");
@@ -224,8 +491,11 @@
     }
 
     button.addEventListener("click", async () => {
+      const originalText = button.textContent;
       button.disabled = true;
-      status.textContent = "正在消耗流量...";
+      button.textContent = "正在请求";
+      status.dataset.tone = "";
+      status.textContent = "正在通过移动数据拉取 payload...";
 
       try {
         const bust = `${Date.now()}-${Math.random().toString(36).slice(2)}`;
@@ -249,9 +519,11 @@
         localStorage.setItem(key, JSON.stringify(records.slice(0, 10)));
         renderHistory();
       } catch (error) {
+        status.dataset.tone = "error";
         status.textContent = "失败：请确认网页和 payload.txt 在同一目录";
       } finally {
         button.disabled = false;
+        button.textContent = originalText;
       }
     });
 
