@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Giffgaff 保号助手</title>
+  <title>zhujufeng 的 Giffgaff 保号助手</title>
   <style>
     :root {
       color-scheme: light;
@@ -27,6 +27,19 @@
       border-radius: 8px;
       padding: 24px;
       box-shadow: 0 16px 36px rgb(31 41 55 / 10%);
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 12px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: #eef6ff;
+      color: #1d4ed8;
+      font-size: 13px;
+      font-weight: 700;
     }
 
     h1 {
@@ -54,6 +67,23 @@
       margin-bottom: 4px;
       font-size: 20px;
       color: #111827;
+    }
+
+    .checks {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin: 0 0 20px;
+    }
+
+    .check {
+      padding: 10px 8px;
+      border-radius: 8px;
+      background: #f9fafb;
+      border: 1px solid #eef0f3;
+      text-align: center;
+      font-size: 13px;
+      color: #374151;
     }
 
     button {
@@ -110,13 +140,20 @@
 </head>
 <body>
   <main>
+    <div class="eyebrow">zhujufeng 开源维护</div>
     <h1>Giffgaff 保号</h1>
-    <p>每次拉取约 120KB 数据，用于触发一次移动数据使用记录。</p>
+    <p>一个极简的移动数据保号工具。每次拉取约 120KB 数据，源码公开、无后台、无统计。</p>
 
     <section class="meter" aria-label="本次消耗">
       <strong>约 120 KB</strong>
-      <p>预计费用以运营商实际计费为准。</p>
+      <p>用于触发一次 Giffgaff 移动数据使用记录，实际费用以运营商计费为准。</p>
     </section>
+
+    <div class="checks" aria-label="使用前检查">
+      <div class="check">关闭 Wi-Fi</div>
+      <div class="check">仅开浏览器数据</div>
+      <div class="check">完成后断网</div>
+    </div>
 
     <button id="run" type="button">开始保号</button>
     <p id="status" role="status"></p>
@@ -129,8 +166,8 @@
     </ul>
 
     <footer>
-      本工具开源，可查看源码：
-      <a id="source" href="https://github.com/zhujufeng/gg-keeper" rel="noopener">GitHub</a>
+      由 zhujufeng 开源维护：
+      <a id="source" href="https://github.com/zhujufeng/gg-keeper" rel="noopener">查看源码</a>
     </footer>
   </main>
 
