@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Giffgaff 保号助手</title>
+  <style>
+    :root {
+      color-scheme: light;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #f6f7f9;
+      color: #1f2937;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+    }
+
+    main {
+      width: min(100%, 420px);
+      background: #fff;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      padding: 24px;
+      box-shadow: 0 16px 36px rgb(31 41 55 / 10%);
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      font-size: 28px;
+      line-height: 1.2;
+    }
+
+    p {
+      margin: 0;
+      color: #4b5563;
+      line-height: 1.7;
+    }
+
+    .meter {
+      margin: 20px 0;
+      padding: 16px;
+      border-radius: 8px;
+      background: #f9fafb;
+      border: 1px solid #eef0f3;
+    }
+
+    .meter strong {
+      display: block;
+      margin-bottom: 4px;
+      font-size: 20px;
+      color: #111827;
+    }
+
+    button {
+      width: 100%;
+      height: 48px;
+      border: 0;
+      border-radius: 8px;
+      background: #16a34a;
+      color: #fff;
+      font: inherit;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    button:disabled {
+      cursor: wait;
+      opacity: .65;
+    }
+
+    ul {
+      margin: 20px 0 0;
+      padding-left: 20px;
+      color: #4b5563;
+      line-height: 1.8;
+    }
+
+    #status {
+      min-height: 28px;
+      margin-top: 14px;
+      font-weight: 700;
+      color: #15803d;
+    }
+
+    #history {
+      margin-top: 16px;
+      font-size: 14px;
+      color: #6b7280;
+      white-space: pre-line;
+    }
+
+    footer {
+      margin-top: 20px;
+      padding-top: 16px;
+      border-top: 1px solid #eef0f3;
+      font-size: 14px;
+      color: #6b7280;
+    }
+
+    a {
+      color: #2563eb;
+      font-weight: 700;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Giffgaff 保号</h1>
+    <p>每次拉取约 120KB 数据，用于触发一次移动数据使用记录。</p>
+
+    <section class="meter" aria-label="本次消耗">
+      <strong>约 120 KB</strong>
+      <p>预计费用以运营商实际计费为准。</p>
+    </section>
+
+    <button id="run" type="button">开始保号</button>
+    <p id="status" role="status"></p>
+    <p id="history"></p>
+
+    <ul>
+      <li>先关闭 Wi-Fi，只保留移动数据。</li>
+      <li>尽量关闭其他应用的联网权限。</li>
+      <li>完成后立即关闭移动数据。</li>
+    </ul>
+
+    <footer>
+      本工具开源，可查看源码：
+      <a id="source" href="https://github.com/zhujufeng/gg-keeper" rel="noopener">GitHub</a>
+    </footer>
+  </main>
+
+  <script>
+    const button = document.querySelector("#run");
+    const status = document.querySelector("#status");
+    const history = document.querySelector("#history");
+    const key = "gg-keeper-history";
+
+    function renderHistory() {
+      const records = JSON.parse(localStorage.getItem(key) || "[]");
+      history.textContent = records.length
+        ? `最近记录：\n${records.slice(0, 3).join("\n")}`
+        : "";
+    }
+
+    button.addEventListener("click", async () => {
+      button.disabled = true;
+      status.textContent = "正在消耗流量...";
+
+      try {
+        const bust = `${Date.now()}-${Math.random().toString(36).slice(2)}`;
+        const res = await fetch(`payload.txt?${bust}`, { cache: "no-store" });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
+        const size = (await res.blob()).size;
+        const kb = (size / 1024).toFixed(1);
+        status.textContent = `完成：已拉取 ${kb} KB`;
+
+        const records = JSON.parse(localStorage.getItem(key) || "[]");
+        records.unshift(`${new Date().toLocaleString()} - ${kb} KB`);
+        localStorage.setItem(key, JSON.stringify(records.slice(0, 10)));
+        renderHistory();
+      } catch (error) {
+        status.textContent = "失败：请确认网页和 payload.txt 在同一目录";
+      } finally {
+        button.disabled = false;
+      }
+    });
+
+    renderHistory();
+  </script>
+</body>
+</html>
