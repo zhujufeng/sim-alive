@@ -3,13 +3,13 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>zhujufeng 的 Giffgaff 保号助手</title>
+  <title>SIM Alive - 海外手机号保号工具</title>
   <style>
     :root {
       color-scheme: light;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: #f6f7f9;
-      color: #1f2937;
+      background: #f4f2ec;
+      color: #1f2933;
     }
 
     body {
@@ -21,9 +21,9 @@
     }
 
     main {
-      width: min(100%, 420px);
-      background: #fff;
-      border: 1px solid #e5e7eb;
+      width: min(100%, 460px);
+      background: #fffdf8;
+      border: 1px solid #ddd6c8;
       border-radius: 8px;
       padding: 24px;
       box-shadow: 0 16px 36px rgb(31 41 55 / 10%);
@@ -36,37 +36,45 @@
       margin-bottom: 12px;
       padding: 6px 10px;
       border-radius: 999px;
-      background: #eef6ff;
-      color: #1d4ed8;
+      background: #e8f4ef;
+      color: #0f6b49;
       font-size: 13px;
       font-weight: 700;
     }
 
     h1 {
       margin: 0 0 8px;
-      font-size: 28px;
+      font-size: 32px;
       line-height: 1.2;
     }
 
     p {
       margin: 0;
-      color: #4b5563;
+      color: #4b5560;
       line-height: 1.7;
+    }
+
+    .lead {
+      font-size: 16px;
     }
 
     .meter {
       margin: 20px 0;
       padding: 16px;
       border-radius: 8px;
-      background: #f9fafb;
-      border: 1px solid #eef0f3;
+      background: #1f2933;
+      border: 1px solid #1f2933;
     }
 
     .meter strong {
       display: block;
       margin-bottom: 4px;
-      font-size: 20px;
-      color: #111827;
+      font-size: 26px;
+      color: #fffdf8;
+    }
+
+    .meter p {
+      color: #d9e2ec;
     }
 
     .checks {
@@ -79,11 +87,32 @@
     .check {
       padding: 10px 8px;
       border-radius: 8px;
-      background: #f9fafb;
-      border: 1px solid #eef0f3;
+      background: #f8f4ea;
+      border: 1px solid #e7dcc9;
       text-align: center;
       font-size: 13px;
       color: #374151;
+    }
+
+    .proof {
+      display: grid;
+      gap: 10px;
+      margin: 20px 0;
+    }
+
+    .proof div {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 10px 0;
+      border-bottom: 1px solid #eee5d7;
+      font-size: 14px;
+      color: #4b5560;
+    }
+
+    .proof strong {
+      color: #1f2933;
+      text-align: right;
     }
 
     button {
@@ -91,7 +120,7 @@
       height: 48px;
       border: 0;
       border-radius: 8px;
-      background: #16a34a;
+      background: #0f6b49;
       color: #fff;
       font: inherit;
       font-weight: 700;
@@ -101,6 +130,10 @@
     button:disabled {
       cursor: wait;
       opacity: .65;
+    }
+
+    button:hover:not(:disabled) {
+      background: #0b5439;
     }
 
     ul {
@@ -127,13 +160,13 @@
     footer {
       margin-top: 20px;
       padding-top: 16px;
-      border-top: 1px solid #eef0f3;
+      border-top: 1px solid #eee5d7;
       font-size: 14px;
       color: #6b7280;
     }
 
     a {
-      color: #2563eb;
+      color: #0f6b49;
       font-weight: 700;
     }
   </style>
@@ -141,12 +174,12 @@
 <body>
   <main>
     <div class="eyebrow">zhujufeng 开源维护</div>
-    <h1>Giffgaff 保号</h1>
-    <p>一个极简的移动数据保号工具。每次拉取约 120KB 数据，源码公开、无后台、无统计。</p>
+    <h1>SIM Alive</h1>
+    <p class="lead">给海外 SIM 轻量产生一次移动数据使用记录。适合 Giffgaff 等需要定期保持活跃的预付费手机号。</p>
 
     <section class="meter" aria-label="本次消耗">
       <strong>约 120 KB</strong>
-      <p>用于触发一次 Giffgaff 移动数据使用记录，实际费用以运营商计费为准。</p>
+      <p>单次探测流量。是否满足保号规则，以对应运营商记录为准。</p>
     </section>
 
     <div class="checks" aria-label="使用前检查">
@@ -154,6 +187,12 @@
       <div class="check">仅开浏览器数据</div>
       <div class="check">完成后断网</div>
     </div>
+
+    <section class="proof" aria-label="请求机制">
+      <div><span>防缓存</span><strong>随机 URL + no-store</strong></div>
+      <div><span>隐私</span><strong>无后台、无统计</strong></div>
+      <div><span>适用</span><strong>海外 SIM 移动数据保号</strong></div>
+    </section>
 
     <button id="run" type="button">开始保号</button>
     <p id="status" role="status"></p>
@@ -167,7 +206,7 @@
 
     <footer>
       由 zhujufeng 开源维护：
-      <a id="source" href="https://github.com/zhujufeng/gg-keeper" rel="noopener">查看源码</a>
+      <a id="source" href="https://github.com/zhujufeng/sim-alive" rel="noopener">查看源码</a>
     </footer>
   </main>
 
@@ -175,7 +214,7 @@
     const button = document.querySelector("#run");
     const status = document.querySelector("#status");
     const history = document.querySelector("#history");
-    const key = "gg-keeper-history";
+    const key = "sim-alive-history";
 
     function renderHistory() {
       const records = JSON.parse(localStorage.getItem(key) || "[]");
@@ -190,7 +229,15 @@
 
       try {
         const bust = `${Date.now()}-${Math.random().toString(36).slice(2)}`;
-        const res = await fetch(`payload.txt?${bust}`, { cache: "no-store" });
+        const url = new URL("payload.txt", location.href);
+        url.searchParams.set("v", bust);
+        const res = await fetch(url, {
+          cache: "no-store",
+          headers: {
+            "Cache-Control": "no-store, max-age=0",
+            Pragma: "no-cache"
+          }
+        });
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
 
         const size = (await res.blob()).size;
