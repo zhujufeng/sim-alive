@@ -6,7 +6,6 @@
   <meta name="description" content="SIM Alive 是一个开源海外 SIM 保号工具，用少量移动数据产生一次使用记录。">
   <meta property="og:title" content="SIM Alive">
   <meta property="og:description" content="开源、无后台、无统计的海外 SIM 保号工具。">
-  <meta property="og:image" content="sim-alive-hero.png">
   <title>SIM Alive - 海外手机号保号工具</title>
   <style>
     :root {
@@ -240,11 +239,52 @@
       box-shadow: 0 28px 80px var(--shadow);
     }
 
-    .visual img {
+    .flow {
+      display: grid;
+      gap: 14px;
+      padding: 22px;
+    }
+
+    .flow h2 {
+      margin: 0;
+      font-size: clamp(28px, 4vw, 44px);
+      line-height: 1;
+      letter-spacing: 0;
+    }
+
+    .flow p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    .route {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-top: 6px;
+    }
+
+    .route div {
+      min-height: 106px;
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: var(--surface-soft);
+    }
+
+    .route span {
       display: block;
-      width: 100%;
-      aspect-ratio: 16 / 10;
-      object-fit: cover;
+      color: var(--accent-strong);
+      font-size: 13px;
+      font-weight: 850;
+    }
+
+    .route strong {
+      display: block;
+      margin-top: 9px;
+      font-size: 16px;
+      line-height: 1.35;
     }
 
     .signal {
@@ -398,6 +438,10 @@
         grid-template-columns: 1fr;
       }
 
+      .route {
+        grid-template-columns: 1fr;
+      }
+
       .signal div {
         min-height: auto;
       }
@@ -440,7 +484,24 @@
         </div>
 
         <aside class="visual" aria-label="海外 SIM 使用场景">
-          <img src="sim-alive-hero.png" alt="手机、SIM 卡和卡托放在桌面上">
+          <div class="flow">
+            <h2>先加载页面，再消耗流量。</h2>
+            <p>页面本身不自动加载大图。你可以先用 Wi-Fi 打开，切到移动数据后再点击按钮。</p>
+            <div class="route" aria-label="推荐使用流程">
+              <div>
+                <span>准备</span>
+                <strong>Wi-Fi 打开页面</strong>
+              </div>
+              <div>
+                <span>切换</span>
+                <strong>关闭 Wi-Fi，启用移动数据</strong>
+              </div>
+              <div>
+                <span>执行</span>
+                <strong>点击开始保号</strong>
+              </div>
+            </div>
+          </div>
           <div class="signal">
             <div>
               <span>隐私</span>
